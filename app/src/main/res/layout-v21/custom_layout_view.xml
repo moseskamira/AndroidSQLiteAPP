@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:layout_margin="1dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+        <ImageView
+                android:layout_height="275dp"
+                android:layout_width="190dp"
+                android:id="@+id/p_image"
+                android:paddingStart="15dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_launcher"
+
+                android:contentDescription="@string/todo"/>
+
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/player_s_profile"
+                android:id="@+id/p_profile"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <EditText
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/p_name"
+                android:paddingStart="15dp"
+                android:hint="@string/player_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" android:autofillHints=""
+                android:inputType=""/>
+
+        <EditText
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/p_position"
+                android:paddingLeft="15dp"
+                android:hint="@string/player_position"
+                android:layout_marginTop="24dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" android:paddingStart="15dp"
+                android:autofillHints="" android:inputType=""/>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+</android.support.v7.widget.CardView>
