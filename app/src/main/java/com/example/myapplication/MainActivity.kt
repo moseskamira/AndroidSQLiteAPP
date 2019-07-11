@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                 fetcheAllPlayers()
             }
         }
+        dialog.show()
     }
 
     fun savePlayer(name: String, position: String){
