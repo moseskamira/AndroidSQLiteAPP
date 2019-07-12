@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Android SQLite App</string>
     <string name="playername">playerName</string>
     <string name="position">position</string>
     <string name="todos">TODOS</string>
