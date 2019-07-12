@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.sql
 
 import android.content.ContentValues
 import android.content.Context
@@ -10,7 +10,7 @@ class DBAdapter(private val context: Context) {
     private val helper: DBHelper = DBHelper(context)
 
     // Opening Database
-    fun openDB(): DBAdapter{
+    fun openDB(): DBAdapter {
         db = helper.writableDatabase
         return this
     }
@@ -21,16 +21,20 @@ class DBAdapter(private val context: Context) {
     }
 
     // Inserting Data Into Database
-    fun inserData(name: String, position: String): Long{
+    fun insertData(name: String, position: String): Boolean{
         val cv = ContentValues()
-        cv.put(Constants.NAME, name)
-        cv.put(Constants.POSITION, position)
-        return db.insert(Constants.TB_NAME, Constants.ROW_ID, cv)
+        cv.put(DBHelper.col_2, name)
+        cv.put(DBHelper.col_3, position)
+        val result: Long = db.insert(DBHelper.TB_NAME, null, cv)
+        if (result > 0) {
+            return true
+        }
+        return false
     }
 
     // Retrieving All Players
     fun getAllPlayers(): Cursor{
-        val columns= arrayOf(Constants.ROW_ID, Constants.NAME, Constants.POSITION)
-        return  db.query(Constants.TB_NAME, columns, null, null, null, null, null)
+        val columns= arrayOf(DBHelper.col_1, DBHelper.col_2, DBHelper.col_3)
+        return  db.query(DBHelper.TB_NAME, columns, null, null, null, null, null)
     }
 }

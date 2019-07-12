@@ -9,8 +9,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.example.myapplication.adapter.MyAdapter
+import com.example.myapplication.model.Player
+import com.example.myapplication.sql.DBAdapter
+import com.example.myapplication.sql.DBHelper
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.custom_layout_view.*
 import kotlinx.android.synthetic.main.recycler_view.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +25,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     lateinit var myAdapter: MyAdapter
     private val allPlayers:ArrayList<Player> = ArrayList()
+    lateinit var myDatabase: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val toolBar = tool_bar
-////        setSupportActionBar(toolBar)
+        myDatabase = DBHelper(this)
         val fab = fab
         fab.setOnClickListener {
             showDialog()
@@ -39,52 +43,53 @@ class MainActivity : AppCompatActivity() {
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         myAdapter = MyAdapter(this, allPlayers)
+        recyclerView.adapter = myAdapter
+        recyclerView.setHasFixedSize(true)
 
         // Retrieve upon running the App when there is some data in the database
-        fetcheAllPlayers()
+        fetchAllPlayers()
     }
 
-    private fun showDialog(){
+    private fun showDialog() {
         val dialog = Dialog(this)
-//        dialog.requestWindowFeature()
         dialog.setContentView(R.layout.custom_layout_view)
-        playerName = findViewById(R.id.p_name)
-        playerPosition = findViewById(R.id.p_position)
-        saveButton = findViewById(R.id.save_btn)
-        retrieveButton = findViewById(R.id.retrieve_btn)
-        if(saveButton != null){
-            saveButton!!.setOnClickListener {
-                savePlayer(playerName!!.text.toString(), playerPosition!!.text.toString())
-            }
-        }
+        playerName = dialog.findViewById(R.id.p_name)
+        playerPosition = dialog.findViewById(R.id.p_position)
+        saveButton = dialog.findViewById(R.id.save_btn)
+        retrieveButton = dialog.findViewById(R.id.retrieve_btn)
+        savePlayer()
 
         if(retrieveButton != null){
             retrieveButton!!.setOnClickListener {
-                fetcheAllPlayers()
+                fetchAllPlayers()
             }
         }
         dialog.show()
     }
 
-    fun savePlayer(name: String, position: String){
+    private fun savePlayer() {
         val dbAdapter = DBAdapter(this)
         dbAdapter.openDB()
-        val result: Long = dbAdapter.inserData(name, position)
-        if (result>0) {
-            playerName!!.text = p_name.text
-            playerPosition!!.text = p_position.text
-    }
-
-        dbAdapter.closeDB()
+        if(saveButton != null){
+            saveButton!!.setOnClickListener {
+                val isInserted: Boolean = dbAdapter.insertData(playerName!!.text.toString(), playerPosition!!.text.toString())
+                if(isInserted) {
+                    Toast.makeText(this, "Player Save", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    Toast.makeText(this, "Unable To Save", Toast.LENGTH_SHORT).show()
+                }
+                fetchAllPlayers()
+            }
+        }
 
         // Refresh
-        fetcheAllPlayers()
-
-
+        fetchAllPlayers()
     }
-    fun fetcheAllPlayers(){
-        allPlayers.clear()
-        val retDbAdapter: DBAdapter = DBAdapter(this)
+
+    private fun fetchAllPlayers() {
+//        allPlayers.clear()
+        val retDbAdapter = DBAdapter(this)
         retDbAdapter.openDB()
         val cursorObject: Cursor = retDbAdapter.getAllPlayers()
         while (cursorObject.moveToNext()){
@@ -95,9 +100,7 @@ class MainActivity : AppCompatActivity() {
             allPlayers.add(player)
 
         }
-        if (allPlayers.size > 0) {
-            recyclerView.adapter
-        }
         retDbAdapter.closeDB()
+        myAdapter.setItems(allPlayers)
     }
 }
