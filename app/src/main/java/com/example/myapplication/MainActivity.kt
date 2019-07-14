@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         val fab = fab
         fab.setOnClickListener {
             showDialog()
-
         }
 
         recyclerView = recycler_view
@@ -72,23 +71,23 @@ class MainActivity : AppCompatActivity() {
         dbAdapter.openDB()
         if(saveButton != null){
             saveButton!!.setOnClickListener {
-                val isInserted: Boolean = dbAdapter.insertData(playerName!!.text.toString(), playerPosition!!.text.toString())
+                val isInserted: Boolean = dbAdapter.insertData(playerName!!.text.toString(), playerPosition!!.text
+                    .toString())
                 if(isInserted) {
-                    Toast.makeText(this, "Player Save", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Player Saved", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    Toast.makeText(this, "Unable To Save", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Unable To Save Player", Toast.LENGTH_SHORT).show()
                 }
                 fetchAllPlayers()
             }
         }
-
         // Refresh
         fetchAllPlayers()
     }
 
     private fun fetchAllPlayers() {
-//        allPlayers.clear()
+        allPlayers.clear()
         val retDbAdapter = DBAdapter(this)
         retDbAdapter.openDB()
         val cursorObject: Cursor = retDbAdapter.getAllPlayers()
@@ -98,7 +97,6 @@ class MainActivity : AppCompatActivity() {
             val playerPosition: String = cursorObject.getString(2)
             val player = Player(playerId, playerName, playerPosition, R.id.player_image)
             allPlayers.add(player)
-
         }
         retDbAdapter.closeDB()
         myAdapter.setItems(allPlayers)
